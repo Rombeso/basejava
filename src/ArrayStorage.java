@@ -13,8 +13,7 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
-        countResumes++;
-        storage[countResumes - 1] = r;
+        storage[countResumes++] = r;
     }
 
     Resume get(String uuid) {
@@ -27,16 +26,15 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        int index = 0;
         for (int i = 0; i < countResumes; i++) {
             if (storage[i].toString().equals(uuid)) {
-                index = i;
+                storage[i] = storage[countResumes - 1];
+                storage[countResumes - 1] = null;
+                countResumes--;
                 break;
             }
         }
-        storage[index] = storage[countResumes - 1];
-        storage[countResumes - 1] = null;
-        countResumes--;
+
     }
 
     /**
