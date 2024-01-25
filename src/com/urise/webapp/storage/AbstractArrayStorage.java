@@ -2,6 +2,8 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
+import java.util.Arrays;
+
 /**
  * Array based storage for Resumes
  */
@@ -27,5 +29,23 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     protected abstract int getIndex(String uuid);
+
+    public void clear() {
+        Arrays.fill(storage, 0, countResumes, null);
+        countResumes = 0;
+    }
+
+    public Resume[] getAll() {
+        return Arrays.copyOf(storage, countResumes);
+    }
+
+    public void update(Resume resume) {
+        int index = getIndex(resume.getUuid());
+        if (index > -1) {
+            storage[index] = resume;
+        } else {
+            System.out.println(RESUME_NOT_PRESENT + resume.getUuid());
+        }
+    }
 
 }
