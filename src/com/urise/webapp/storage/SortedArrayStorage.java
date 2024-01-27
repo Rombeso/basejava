@@ -53,10 +53,6 @@ public class SortedArrayStorage extends AbstractArrayStorage{
     }
 
     @Override
-    public void update(Resume resume) {
-
-    }
-    @Override
     protected int getIndex(String uuid) {
         Resume searchKey = new Resume();
         searchKey.setUuid(uuid);
