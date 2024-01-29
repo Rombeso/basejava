@@ -4,51 +4,30 @@ import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public class SortedArrayStorage extends AbstractArrayStorage{
-
-
+public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
-    public void save(Resume r) {
-        int index = getIndex(r.getUuid());
-
-        if (countResumes == STORAGE_LIMIT) {
-            System.out.println("Невозможно сохранить резюме с "
-                    + r.getUuid() + ", storage заполнен полностью, максимальное количество резюме - "
-                    + STORAGE_LIMIT);
-        } else if (index >= 0) {
-            System.out.println(RESUME_PRESENT + r.getUuid());
+    protected void addResume(Resume r, int index) {
+        int insertionPoint = -index - 1;
+        if (insertionPoint > countResumes) {
+            storage[countResumes++] = r;
         } else {
-            int insertionPoint = -index - 1;
-            if (insertionPoint > countResumes) {
-                storage[countResumes++] = r;
-            } else {
-
-                for (int i = countResumes; i >= insertionPoint; i--) {
-                    if (i == insertionPoint) {
-                        storage[i + 1] = storage[i];
-                        storage[i] = r;
-                    } else {
-                        storage[i + 1] = storage[i];
-                    }
+            for (int i = countResumes; i >= insertionPoint; i--) {
+                if (i == insertionPoint) {
+                    storage[i + 1] = storage[i];
+                    storage[i] = r;
+                } else {
+                    storage[i + 1] = storage[i];
                 }
-
-                countResumes++;
             }
+            countResumes++;
         }
     }
 
     @Override
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index >= 0) {
-            storage[index] = null;
-            for (int i = index; i < countResumes; i++) {
-                storage[i] = storage[i + 1];
-            }
-            storage[countResumes - 1] = null;
-            countResumes--;
-        } else {
-            System.out.println(RESUME_NOT_PRESENT + uuid);
+    protected void removeResume(int index) {
+        storage[index] = null;
+        for (int i = index; i < countResumes; i++) {
+            storage[i] = storage[i + 1];
         }
     }
 
@@ -60,3 +39,4 @@ public class SortedArrayStorage extends AbstractArrayStorage{
     }
 
 }
+
