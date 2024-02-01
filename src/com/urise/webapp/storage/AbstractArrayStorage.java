@@ -18,8 +18,8 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     protected abstract int getIndex(String uuid);
-    protected abstract void removeResume(int index);
-    protected abstract void addResume(Resume r, int index);
+    protected abstract void removeElement(int index);
+    protected abstract void insertElement(Resume r, int index);
 
     public Resume get(String uuid) {
         int index = getIndex(uuid);
@@ -40,14 +40,14 @@ public abstract class AbstractArrayStorage implements Storage {
         } else if (index >= 0) {
             System.out.println(RESUME_PRESENT + r.getUuid());
         } else {
-            addResume(r, index);
+            insertElement(r, index);
         }
     }
 
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index > -1) {
-            removeResume(index);
+            removeElement(index);
             countResumes--;
         } else {
             System.out.println(RESUME_NOT_PRESENT + uuid);
