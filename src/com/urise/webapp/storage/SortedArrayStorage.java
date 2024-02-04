@@ -8,21 +8,14 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
     protected void insertElement(Resume r, int index) {
         int insertionPoint = -index - 1;
-        if (insertionPoint > countResumes) {
+        if (insertionPoint > countResumes || insertionPoint == STORAGE_LIMIT - 1) {
             storage[countResumes++] = r;
         } else {
-            for (int i = countResumes; i >= insertionPoint; i--) {
-                if (i == insertionPoint) {
-                    storage[i + 1] = storage[i];
-                    storage[i] = r;
-                } else {
-                    storage[i + 1] = storage[i];
-                }
-            }
+            System.arraycopy(storage, insertionPoint, storage, insertionPoint + 1, (countResumes - insertionPoint));
+            storage[insertionPoint] = r;
             countResumes++;
         }
     }
-
     @Override
     protected void removeElement(int index) {
         storage[index] = null;
@@ -30,11 +23,9 @@ public class SortedArrayStorage extends AbstractArrayStorage {
             storage[i] = storage[i + 1];
         }
     }
-
     @Override
     protected int getIndex(String uuid) {
-        Resume searchKey = new Resume();
-        searchKey.setUuid(uuid);
+        Resume searchKey = new Resume(uuid);
         return Arrays.binarySearch(storage, 0, countResumes, searchKey);
     }
 
