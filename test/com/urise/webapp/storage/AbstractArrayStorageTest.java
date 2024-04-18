@@ -38,7 +38,7 @@ abstract class AbstractArrayStorageTest {
         assertSize(3);
     }
 
-    void assertSize(int size) throws Exception {
+    private void assertSize(int size) throws Exception {
         Assertions.assertEquals(size, storage.size());
     }
 
@@ -49,7 +49,7 @@ abstract class AbstractArrayStorageTest {
         assertGet(resume3);
     }
 
-    void assertGet(Resume resume) throws Exception {
+    private void assertGet(Resume resume) throws Exception {
         Assertions.assertEquals(resume, storage.get(resume.getUuid()));
     }
 
