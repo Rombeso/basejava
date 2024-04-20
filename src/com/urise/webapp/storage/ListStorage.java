@@ -9,6 +9,11 @@ public class ListStorage extends AbstractStorage {
     protected final ArrayList<Resume> storage = new ArrayList<>();
 
     @Override
+    protected boolean checkStorageLimit() {
+        return false;
+    }
+
+    @Override
     protected void setElementsByIndex(int index, Resume r) {
         storage.set(index, r);
     }

@@ -7,7 +7,6 @@ import com.urise.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
 
-    protected static final int STORAGE_LIMIT = 10000;
     protected int countResumes = 0;
 
     public void clear() {
@@ -31,7 +30,7 @@ public abstract class AbstractStorage implements Storage {
 
     public void save(Resume r) {
         int index = getIndex(r.getUuid());
-        if (countResumes == STORAGE_LIMIT) {
+        if (checkStorageLimit()) {
             throw new StorageException("Storage overflow", r.getUuid());
         } else if (index >= 0) {
             throw new ExistStorageException(r.getUuid());
@@ -63,6 +62,7 @@ public abstract class AbstractStorage implements Storage {
         }
     }
 
+    protected abstract boolean checkStorageLimit();
     protected abstract void setElementsByIndex(int index, Resume resume);
 
     protected abstract Resume[] getAllElements();

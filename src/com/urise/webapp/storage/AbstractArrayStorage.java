@@ -9,8 +9,13 @@ import java.util.Arrays;
  */
 public abstract class AbstractArrayStorage extends AbstractStorage {
 
-    protected final Resume[] storage = new Resume[STORAGE_LIMIT];
+    protected static final int STORAGE_LIMIT = 10000;
 
+    protected final Resume[] storage = new Resume[STORAGE_LIMIT];
+    @Override
+    protected boolean checkStorageLimit() {
+        return countResumes == STORAGE_LIMIT;
+    }
     @Override
     protected void setElementsByIndex(int index, Resume resume) {
         storage[index] = resume;
