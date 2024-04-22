@@ -6,8 +6,8 @@ import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
-    protected void insertElement(Resume r, int index) {
-        int insertionPoint = -index - 1;
+    protected void insertElement(Resume r, Object index) {
+        int insertionPoint = -(int) index - 1;
         if (insertionPoint > countResumes || insertionPoint == STORAGE_LIMIT - 1) {
             storage[countResumes++] = r;
         } else {
@@ -16,15 +16,18 @@ public class SortedArrayStorage extends AbstractArrayStorage {
             countResumes++;
         }
     }
+
     @Override
-    protected void removeElement(int index) {
-        storage[index] = null;
-        for (int i = index; i < countResumes; i++) {
+    protected void removeElement(Object index) {
+        storage[(int) index] = null;
+        for (int i = (int) index; i < countResumes; i++) {
             storage[i] = storage[i + 1];
         }
+        countResumes--;
     }
+
     @Override
-    protected int getIndex(String uuid) {
+    protected Object getIndex(String uuid) {
         Resume searchKey = new Resume(uuid);
         return Arrays.binarySearch(storage, 0, countResumes, searchKey);
     }

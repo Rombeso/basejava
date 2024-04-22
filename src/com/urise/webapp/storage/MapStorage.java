@@ -2,19 +2,16 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ListStorage extends AbstractStorage {
+public class MapStorage extends AbstractStorage {
 
-    protected final ArrayList<Resume> storage = new ArrayList<>();
+    protected final HashMap<String, Resume> storage = new HashMap<>();
 
     @Override
     protected boolean isExist(String uuid) {
-        int index = (int) getIndex(uuid);
-        if (index > -1) {
-            return true;
-        }
-        return false;
+        return storage.containsKey(uuid);
     }
 
     @Override
@@ -24,17 +21,23 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void setElementsByIndex(Object index, Resume r) {
-        storage.set((int) index, r);
+        storage.put((String) index, r);
     }
 
     @Override
     protected Resume[] getAllElements() {
-        return storage.toArray(new Resume[storage.size()]);
+        Resume[] arrayResume = new Resume[storage.size()];
+        int count = 0;
+        for (Map.Entry<String, Resume> pair : storage.entrySet()) {
+            Resume value = pair.getValue();
+            arrayResume[count++] = value;
+        }
+        return arrayResume;
     }
 
     @Override
     protected Resume getElementByIndex(Object index) {
-        return storage.get((int) index);
+        return storage.get((String) index);
     }
 
     @Override
@@ -44,22 +47,22 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected Object getIndex(String uuid) {
-        Resume resumeToFind = new Resume(uuid);
-        return storage.indexOf(resumeToFind);
+        return uuid;
     }
 
     @Override
     protected void removeElement(Object index) {
-        storage.remove((int) index);
+        storage.remove((String) index);
     }
 
     @Override
     protected void insertElement(Resume r, Object index) {
-        storage.add(r);
+        storage.put((String) index, r);
     }
 
     @Override
     protected int getSize() {
         return storage.size();
     }
+
 }

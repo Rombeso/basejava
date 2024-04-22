@@ -7,45 +7,40 @@ import com.urise.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
 
-    protected int countResumes = 0;
-
     public void clear() {
         clearAllElements();
-        countResumes = 0;
     }
-
 
     public int size() {
-        return countResumes;
+        return getSize();
     }
 
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index > -1) {
-            return getElementByIndex(index);
+    public Object get(String uuid) {
+        if (isExist(uuid)) {
+            Object searchKey = getIndex(uuid);
+            return getElementByIndex(searchKey);
         } else {
-            throw new NotExistStorageException(uuid);
+            return getNotExistingSearchKey(uuid);
         }
     }
 
     public void save(Resume r) {
-        int index = getIndex(r.getUuid());
         if (checkStorageLimit()) {
             throw new StorageException("Storage overflow", r.getUuid());
-        } else if (index >= 0) {
-            throw new ExistStorageException(r.getUuid());
+        } else if (isExist(r.getUuid())) {
+            getExistingSearchKey(r.getUuid());
         } else {
-            insertElement(r, index);
+            Object searchKey = getIndex(r.getUuid());
+            insertElement(r, searchKey);
         }
     }
 
     public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index > -1) {
-            removeElement(index);
-            countResumes--;
+        if (isExist(uuid)) {
+            Object searchKey = getIndex(uuid);
+            removeElement(searchKey);
         } else {
-            throw new NotExistStorageException(uuid);
+            getNotExistingSearchKey(uuid);
         }
     }
 
@@ -53,27 +48,40 @@ public abstract class AbstractStorage implements Storage {
         return getAllElements();
     }
 
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index > -1) {
-            setElementsByIndex(index, resume);
+    public void update(Resume r) {
+        if (isExist(r.getUuid())) {
+            Object searchKey = getIndex(r.getUuid());
+            setElementsByIndex(searchKey, r);
         } else {
-            throw new NotExistStorageException(resume.getUuid());
+            getNotExistingSearchKey(r.getUuid());
         }
     }
 
+    private Object getExistingSearchKey(String uuid) {
+        throw new ExistStorageException(uuid);
+    }
+
+    private Object getNotExistingSearchKey(String uuid) {
+        throw new NotExistStorageException(uuid);
+    }
+
+    protected abstract boolean isExist(String uuid);
+
     protected abstract boolean checkStorageLimit();
-    protected abstract void setElementsByIndex(int index, Resume resume);
+
+    protected abstract void setElementsByIndex(Object index, Resume resume);
 
     protected abstract Resume[] getAllElements();
 
-    protected abstract Resume getElementByIndex(int index);
+    protected abstract Resume getElementByIndex(Object index);
 
     protected abstract void clearAllElements();
 
-    protected abstract int getIndex(String uuid);
+    protected abstract Object getIndex(String uuid);
 
-    protected abstract void removeElement(int index);
+    protected abstract void removeElement(Object index);
 
-    protected abstract void insertElement(Resume r, int index);
+    protected abstract void insertElement(Resume r, Object index);
+
+    protected abstract int getSize();
 }
