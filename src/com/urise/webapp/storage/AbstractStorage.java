@@ -2,7 +2,6 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
@@ -25,9 +24,8 @@ public abstract class AbstractStorage implements Storage {
     }
 
     public void save(Resume r) {
-        if (checkStorageLimit()) {
-            throw new StorageException("Storage overflow", r.getUuid());
-        } else if (isExist(r.getUuid())) {
+        checkStorageLimit(r.getUuid());
+        if (isExist(r.getUuid())) {
             getExistingSearchKey(r.getUuid());
         } else {
             Object searchKey = getIndex(r.getUuid());
@@ -67,7 +65,7 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract boolean isExist(String uuid);
 
-    protected abstract boolean checkStorageLimit();
+    protected abstract void checkStorageLimit(String uuid);
 
     protected abstract void setElementsByIndex(Object index, Resume resume);
 

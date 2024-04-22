@@ -15,9 +15,7 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean checkStorageLimit() {
-        return false;
-    }
+    protected void checkStorageLimit(String uuid) { }
 
     @Override
     protected void setElementsByIndex(Object index, Resume r) {

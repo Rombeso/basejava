@@ -3,10 +3,11 @@ package com.urise.webapp.storage;
 import com.urise.webapp.model.Resume;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListStorage extends AbstractStorage {
 
-    protected final ArrayList<Resume> storage = new ArrayList<>();
+    protected final List<Resume> storage = new ArrayList<>();
 
     @Override
     protected boolean isExist(String uuid) {
@@ -18,9 +19,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean checkStorageLimit() {
-        return false;
-    }
+    protected void checkStorageLimit(String uuid) {}
 
     @Override
     protected void setElementsByIndex(Object index, Resume r) {
@@ -44,8 +43,12 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected Object getIndex(String uuid) {
-        Resume resumeToFind = new Resume(uuid);
-        return storage.indexOf(resumeToFind);
+        for (int i = 0; i < storage.size(); i++) {
+            if (storage.get(i).toString().equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
