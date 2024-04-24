@@ -14,7 +14,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
 
-    @Override
     protected void checkStorageLimit(String uuid) {
         if (countResumes == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", uuid);
@@ -27,7 +26,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume[] getAllElements() {
+    protected Resume[] doGetAll() {
         return Arrays.copyOf(storage, countResumes);
     }
 
@@ -47,17 +46,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return countResumes;
     }
 
-    ;
-
     @Override
-    protected boolean isExist(String uuid) {
-        int index = (int) getIndex(uuid);
-        if (index > -1) {
-            return true;
-        }
-        return false;
+    protected boolean isExist(Object searchKey) {
+        return (int) searchKey > -1;
     }
-
-    ;
-
 }

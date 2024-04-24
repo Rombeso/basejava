@@ -7,15 +7,12 @@ import java.util.Map;
 
 public class MapStorage extends AbstractStorage {
 
-    protected final HashMap<String, Resume> storage = new HashMap<>();
+    protected final Map<String, Resume> storage = new HashMap<>();
 
     @Override
-    protected boolean isExist(String uuid) {
+    protected boolean isExist(Object uuid) {
         return storage.containsKey(uuid);
     }
-
-    @Override
-    protected void checkStorageLimit(String uuid) { }
 
     @Override
     protected void setElementsByIndex(Object index, Resume r) {
@@ -23,14 +20,8 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume[] getAllElements() {
-        Resume[] arrayResume = new Resume[storage.size()];
-        int count = 0;
-        for (Map.Entry<String, Resume> pair : storage.entrySet()) {
-            Resume value = pair.getValue();
-            arrayResume[count++] = value;
-        }
-        return arrayResume;
+    protected Resume[] doGetAll() {
+        return storage.values().toArray(new Resume[0]);
     }
 
     @Override
@@ -44,7 +35,7 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object getIndex(String uuid) {
+    protected Object getSearchKey(String uuid) {
         return uuid;
     }
 
