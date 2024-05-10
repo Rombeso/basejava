@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
-    protected void insertElement(Resume r, Object index) {
+    protected void doSave(Resume r, Object index) {
         checkStorageLimit(r.getUuid());
         int insertionPoint = -(int) index - 1;
         if (insertionPoint > countResumes || insertionPoint == STORAGE_LIMIT - 1) {
@@ -19,7 +19,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void removeElement(Object index) {
+    protected void doDelete(Object index) {
         storage[(int) index] = null;
         for (int i = (int) index; i < countResumes; i++) {
             storage[i] = storage[i + 1];
@@ -29,7 +29,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected Object getSearchKey(String uuid) {
-        Resume searchKey = new Resume(uuid);
+        Resume searchKey = new Resume(uuid, "dummy");
         return Arrays.binarySearch(storage, 0, countResumes, searchKey);
     }
 

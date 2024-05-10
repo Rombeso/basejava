@@ -3,6 +3,7 @@ package com.urise.webapp.storage;
 import com.urise.webapp.model.Resume;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
@@ -15,18 +16,22 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void setElementsByIndex(Object index, Resume r) {
-        storage.set((int) index, r);
+    protected void doUpdate(Object searchKey, Resume r) {
+        storage.set((int) searchKey, r);
     }
 
     @Override
-    protected Resume[] doGetAll() {
-        return storage.toArray(new Resume[0]);
+    protected List<Resume> doGetAll() {
+        List<Resume> copyStorage = new ArrayList<>(storage);
+        copyStorage.stream().sorted(Comparator.comparing(Resume::getFullName)
+                .thenComparing(Resume::getUuid)
+        ).toList();
+        return copyStorage;
     }
 
     @Override
-    protected Resume getElementByIndex(Object index) {
-        return storage.get((int) index);
+    protected Resume doGet(Object searchKey) {
+        return storage.get((int) searchKey);
     }
 
     @Override
@@ -45,12 +50,12 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void removeElement(Object index) {
-        storage.remove((int) index);
+    protected void doDelete(Object searchKey) {
+        storage.remove((int) searchKey);
     }
 
     @Override
-    protected void insertElement(Resume r, Object index) {
+    protected void doSave(Resume r, Object searchKey) {
         storage.add(r);
     }
 

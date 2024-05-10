@@ -4,6 +4,8 @@ import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
+import java.util.List;
+
 public abstract class AbstractStorage implements Storage {
 
     public void clear() {
@@ -16,31 +18,31 @@ public abstract class AbstractStorage implements Storage {
 
     public Object get(String uuid) {
         Object searchKey = getExistingSearchKey(uuid);
-        return getElementByIndex(searchKey);
+        return doGet(searchKey);
     }
 
     public void save(Resume r) {
         Object searchKey = getNotExistingSearchKey(r.getUuid());
-        insertElement(r, searchKey);
+        doSave(r, searchKey);
     }
 
     public void delete(String uuid) {
         Object searchKey = getExistingSearchKey(uuid);
-        removeElement(searchKey);
+        doDelete(searchKey);
     }
 
-    public Resume[] getAll() {
+    public List<Resume> getAllSorted() {
         return doGetAll();
     }
 
     public void update(Resume r) {
         Object searchKey = getExistingSearchKey(r.getUuid());
-        setElementsByIndex(searchKey, r);
+        doUpdate(searchKey, r);
     }
 
     private Object getExistingSearchKey(String uuid) {
         Object searchKey = getSearchKey(uuid);
-        if(isExist(searchKey)) {
+        if (isExist(searchKey)) {
             return searchKey;
         } else {
             throw new NotExistStorageException(uuid);
@@ -49,7 +51,7 @@ public abstract class AbstractStorage implements Storage {
 
     private Object getNotExistingSearchKey(String uuid) {
         Object searchKey = getSearchKey(uuid);
-        if(!isExist(searchKey)) {
+        if (!isExist(searchKey)) {
             return searchKey;
         } else {
             throw new ExistStorageException(uuid);
@@ -58,19 +60,19 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract boolean isExist(Object searchKey);
 
-    protected abstract void setElementsByIndex(Object index, Resume resume);
+    protected abstract void doUpdate(Object searchKey, Resume resume);
 
-    protected abstract Resume[] doGetAll();
+    protected abstract List<Resume> doGetAll();
 
-    protected abstract Resume getElementByIndex(Object index);
+    protected abstract Resume doGet(Object searchKey);
 
     protected abstract void clearAllElements();
 
     protected abstract Object getSearchKey(String uuid);
 
-    protected abstract void removeElement(Object index);
+    protected abstract void doDelete(Object searchKey);
 
-    protected abstract void insertElement(Resume r, Object index);
+    protected abstract void doSave(Resume r, Object searchKey);
 
     protected abstract int getSize();
 }

@@ -16,13 +16,13 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void insertElement(Resume r, Object index) {
+    protected void doSave(Resume r, Object index) {
         checkStorageLimit(r.getUuid());
         storage[countResumes++] = r;
     }
 
     @Override
-    protected void removeElement(Object index) {
+    protected void doDelete(Object index) {
         storage[(int) index] = storage[countResumes-- - 1];
     }
 }
