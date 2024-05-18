@@ -3,35 +3,30 @@ package com.urise.webapp.storage;
 import com.urise.webapp.model.Resume;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-public class ListStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage<Integer> {
 
     protected final List<Resume> storage = new ArrayList<>();
 
     @Override
-    protected boolean isExist(Object searchKey) {
-        return (int) searchKey > -1;
+    protected boolean isExist(Integer searchKey) {
+        return searchKey > -1;
     }
 
     @Override
-    protected void doUpdate(Object searchKey, Resume r) {
-        storage.set((int) searchKey, r);
+    protected void doUpdate(Integer searchKey, Resume r) {
+        storage.set(searchKey, r);
     }
 
     @Override
-    protected List<Resume> doGetAll() {
-        List<Resume> copyStorage = new ArrayList<>(storage);
-        copyStorage.stream().sorted(Comparator.comparing(Resume::getFullName)
-                .thenComparing(Resume::getUuid)
-        ).toList();
-        return copyStorage;
+    protected List<Resume> doCopyAll() {
+        return new ArrayList<>(storage);
     }
 
     @Override
-    protected Resume doGet(Object searchKey) {
-        return storage.get((int) searchKey);
+    protected Resume doGet(Integer searchKey) {
+        return storage.get(searchKey);
     }
 
     @Override
@@ -40,7 +35,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected Integer getSearchKey(String uuid) {
         for (int i = 0; i < storage.size(); i++) {
             if (storage.get(i).toString().equals(uuid)) {
                 return i;
@@ -50,12 +45,12 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doDelete(Object searchKey) {
-        storage.remove((int) searchKey);
+    protected void doDelete(Integer searchKey) {
+        storage.remove(searchKey.intValue());
     }
 
     @Override
-    protected void doSave(Resume r, Object searchKey) {
+    protected void doSave(Resume r, Integer searchKey) {
         storage.add(r);
     }
 
