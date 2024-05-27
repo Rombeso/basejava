@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Organization {
-    private String name;
-    private String website;
+    private final Link homePage;
     private List<Period> periods;
 
-
-    public Organization(String name, String website) {
-        this.name = name;
-        this.website = website;
+    public Organization(String name, String url) {
+        this.homePage = new Link(name, url);
         this.periods = new ArrayList<>();
     }
 
@@ -23,13 +20,12 @@ public class Organization {
         return periods;
     }
 
-    public String getName() {
-        return name;
+
+    @Override
+    public String toString() {
+        return "Organization{" +
+                "homePage=" + homePage +
+                ", periods=" + periods +
+                '}';
     }
-
-    public String getWebsite() {
-        return website;
-    }
-
-
 }

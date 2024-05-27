@@ -7,13 +7,14 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class ResumeTestData {
+
     public static void main(String[] args) {
-        Resume newResume = createResume();
-        printResume(newResume);
+        Resume newResume = createResume("uuid1", "Григорий Кислин");
+    //        printResume(newResume);
     }
 
-    private static Resume createResume() {
-        Resume resume = new Resume("uuid1", "Григорий Кислин");
+    public static Resume createResume(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
         // Contacts
         resume.setContact(ContactType.TELEPHONE, "+7(921) 855-0482");
         resume.setContact(ContactType.SKYPE, "skype:grigory.kislin");
@@ -197,26 +198,20 @@ public class ResumeTestData {
         }
         System.out.println();
         System.out.println(SectionType.OBJECTIVE.getTitle() + ":");
-        r.getSection(SectionType.OBJECTIVE).print();
 
         System.out.println();
         System.out.println(SectionType.PERSONAL.getTitle() + ":");
-        r.getSection(SectionType.PERSONAL).print();
 
         System.out.println();
         System.out.println(SectionType.ACHIEVEMENT.getTitle() + ":");
-        r.getSection(SectionType.ACHIEVEMENT).print();
 
         System.out.println();
         System.out.println(SectionType.QUALIFICATIONS.getTitle() + ":");
-        r.getSection(SectionType.QUALIFICATIONS).print();
 
         System.out.println();
         System.out.println(SectionType.EXPERIENCE.getTitle() + ":");
-        r.getSection(SectionType.EXPERIENCE).print();
 
         System.out.println();
         System.out.println(SectionType.EDUCATION.getTitle() + ":");
-        r.getSection(SectionType.EDUCATION).print();
     }
 }
